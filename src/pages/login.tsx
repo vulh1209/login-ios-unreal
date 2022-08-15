@@ -17,18 +17,20 @@ const Home: NextPage = () => {
     provider,
     login,
     logout,
-    getUserInfo,
     getPrivateKey,
     web3Auth,
     chain,
     isLoading,
-    setIsLoading,
   } = useWeb3Auth();
 
-  const [userInfo, setUserInfo] = useState<string>();
   const [privateKey, setPrivateKey] = useState<string>();
 
-  const handleSignIn = async () => {
+
+  const handleSignOut = async () => {
+    await logout();
+  };
+
+  const handleGetPrivateKey= async () => {
     // refresh token
     const session = await getCurrentSession(true);
     if (!session) return;
@@ -39,23 +41,17 @@ const Home: NextPage = () => {
     await login(WALLET_ADAPTERS.OPENLOGIN, "jwt", {
       id_token,
     });
-  };
-
-  const handleSignOut = async () => {
-    await logout();
-  };
-
-  const handleGetUserInfo = async () => {
-    const info = await getUserInfo();
-    console.log(info);
-    setUserInfo(JSON.stringify(info, null, 2));
-  };
-
-  const handleGetPrivateKey= async () => {
+    
     const sk = await getPrivateKey();
     console.log(sk);
     setPrivateKey(JSON.stringify(sk, null, 2));
   };
+
+  useEffect(() => {
+    return () => {
+      effect
+    };
+  }, [input])
 
   return (
     <div className={styles.container}>
@@ -70,23 +66,14 @@ const Home: NextPage = () => {
           "Loading..."
         ) : user ? (
           <>
-            <Button onClick={handleSignOut}>SIGN OUT</Button>
-            <Button onClick={handleGetUserInfo}>GET USER INFO</Button>
-            <Button onClick={handleGetPrivateKey}>GET PRIVATE KEY</Button>
-            {userInfo && (
-              <pre>
-                <code>{userInfo}</code>              
-              </pre>
-            )}
-            {privateKey && (
+            <Button onClick={handleSignOut}>SIGN OUT</Button>            
+          </>
+        ) :""}
+        {privateKey && (
               <pre>
                 <code>{privateKey}</code>              
               </pre>
             )}
-          </>
-        ) : (
-          <Button onClick={handleSignIn}>SIGN IN</Button>
-        )}
       </VStack>
     </div>
   );
