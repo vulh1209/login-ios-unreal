@@ -4771,6 +4771,20 @@
     pump "^3.0.0"
     readable-stream "^3.6.0"
 
+"@toruslabs/openlogin-jrpc@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-jrpc/-/openlogin-jrpc-2.5.0.tgz#4ef2023a8326ce975e74ca1ecbb2d36a4b0cdab8"
+  integrity sha512-A46zxx5r76iWpawYYLu0aHfaHnHQuycDdJvmGSAZ1dzPuhGbFzXWqx4puBoQn08C4V7SpUsr+yMUNk/aMp/gYA==
+  dependencies:
+    "@toruslabs/openlogin-utils" "^2.1.0"
+    end-of-stream "^1.4.4"
+    eth-rpc-errors "^4.0.3"
+    events "^3.3.0"
+    fast-safe-stringify "^2.1.1"
+    once "^1.4.0"
+    pump "^3.0.0"
+    readable-stream "^3.6.0"
+
 "@toruslabs/openlogin-utils@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@toruslabs/openlogin-utils/-/openlogin-utils-2.1.0.tgz#ae77dd4611970cbeb1222d90c3f4f37b3d94b407"
@@ -4780,19 +4794,6 @@
     keccak "^3.0.2"
     randombytes "^2.1.0"
 
-"@toruslabs/openlogin@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin/-/openlogin-2.2.0.tgz#1d0cc83e0e4e6704691972297b0d657381c23163"
-  integrity sha512-lxRli6VV6Yp6bIb2GZFQTzLXrLmfVpp2qCIEOP1kt9zf+/3weIWL/YL0MGv65PjUv8DWKR7DcIx+AMeL47TtpA==
-  dependencies:
-    "@toruslabs/eccrypto" "^1.1.8"
-    "@toruslabs/http-helpers" "^3.0.0"
-    "@toruslabs/openlogin-jrpc" "^2.1.0"
-    "@toruslabs/openlogin-utils" "^2.1.0"
-    lodash.merge "^4.6.2"
-    loglevel "^1.8.0"
-    pump "^3.0.0"
-
 "@toruslabs/openlogin@^2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@toruslabs/openlogin/-/openlogin-2.3.0.tgz#0ef23281a9c021df5a6d987dd39eab98bc8dc601"
@@ -4801,6 +4802,19 @@
     "@toruslabs/eccrypto" "^1.1.8"
     "@toruslabs/http-helpers" "^3.1.0"
     "@toruslabs/openlogin-jrpc" "^2.1.0"
+    "@toruslabs/openlogin-utils" "^2.1.0"
+    lodash.merge "^4.6.2"
+    loglevel "^1.8.0"
+    pump "^3.0.0"
+
+"@toruslabs/openlogin@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@toruslabs/openlogin/-/openlogin-2.5.0.tgz#77c05c748eb70faaacb92f3859491a56b8823391"
+  integrity sha512-SGecWFRGPTuPAB3sX0J7fRSkczWLJHi1u6LxEFoOMrSckancVeiyhKMn3P+RCOoVUHLt9n8g8yWsiBa7D7mT0A==
+  dependencies:
+    "@toruslabs/eccrypto" "^1.1.8"
+    "@toruslabs/http-helpers" "^3.1.0"
+    "@toruslabs/openlogin-jrpc" "^2.5.0"
     "@toruslabs/openlogin-utils" "^2.1.0"
     lodash.merge "^4.6.2"
     loglevel "^1.8.0"

@@ -39,6 +39,7 @@ export interface IWeb3AuthContext {
   getBalance: () => Promise<any>;
   signTransaction: () => Promise<void>;
   signAndSendTransaction: () => Promise<void>;
+  getPrivateKey: () =>Promise<any>;
 }
 
 export const Web3AuthContext = createContext<IWeb3AuthContext | null>(null);
@@ -141,6 +142,8 @@ export const Web3AuthProvider: FunctionComponent<IWeb3AuthState> = ({
         });
         web3AuthInstance.configureAdapter(adapter);
         await web3AuthInstance.init();
+        console.log("instance",web3AuthInstance);
+        
         setWeb3Auth(web3AuthInstance);
       } catch (error) {
         console.error(error);
@@ -149,7 +152,7 @@ export const Web3AuthProvider: FunctionComponent<IWeb3AuthState> = ({
       }
     }
     init();
-  }, [chain, web3AuthNetwork, setWalletProvider]);
+  }, [chain, web3AuthNetwork, setWalletProvider,currentChainConfig]);
 
   const login = async (
     adapter: WALLET_ADAPTER_TYPE,
@@ -226,6 +229,15 @@ export const Web3AuthProvider: FunctionComponent<IWeb3AuthState> = ({
     return await provider.getBalance();
   };
 
+  const getPrivateKey = async () => {
+    if (!provider) {
+      console.log("provider not initialized yet");
+      uiConsole("provider not initialized yet");
+      return;
+    }
+    return await provider.getPrivateKey();
+  };
+
   const signMessage = async () => {
     if (!provider) {
       console.log("provider not initialized yet");
@@ -275,6 +287,7 @@ export const Web3AuthProvider: FunctionComponent<IWeb3AuthState> = ({
     signMessage,
     signTransaction,
     signAndSendTransaction,
+    getPrivateKey,
   };
   return (
     <Web3AuthContext.Provider value={contextProvider}>

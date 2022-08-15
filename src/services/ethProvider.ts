@@ -26,6 +26,17 @@ const ethProvider = (provider: SafeEventEmitterProvider, uiConsole: (...args: un
     }
   };
 
+  const getPrivateKey = async () => {
+    try {
+      console.log("provider",provider);
+      const sk = await provider.request({ method: "private_key" }) ;
+      console.log("sk",sk);
+    } catch (error) {
+      console.error("Error", error);
+      uiConsole("error", error);
+    }
+  };
+
   const signMessage = async () => {
     try {
       const pubKey = (await provider.request({ method: "eth_accounts" })) as string[];
@@ -76,7 +87,7 @@ const ethProvider = (provider: SafeEventEmitterProvider, uiConsole: (...args: un
       uiConsole("error", error);
     }
   };
-  return { getAccounts, getBalance, signMessage, signAndSendTransaction, signTransaction };
+  return { getAccounts, getBalance, signMessage, signAndSendTransaction, signTransaction,getPrivateKey };
 };
 
 export default ethProvider;
