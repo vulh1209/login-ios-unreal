@@ -3,15 +3,16 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import styles from "../styles/Home.module.css";
+import { sign } from 'jsonwebtoken'
 
-import { useAuthContext } from "../providers/auth";
+
 import { useWeb3Auth } from "../services/web3auth";
 import { WALLET_ADAPTERS } from "@web3auth/base";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useQuery from "../services/useQuery";
 
 const Home: NextPage = () => {
-  const { getCurrentSession } = useAuthContext();
-
+  const query = useQuery()
   const {
     user,
     provider,
@@ -23,35 +24,42 @@ const Home: NextPage = () => {
     isLoading,
   } = useWeb3Auth();
 
-  const [privateKey, setPrivateKey] = useState<string>();
 
 
   const handleSignOut = async () => {
     await logout();
   };
 
-  const handleGetPrivateKey= async () => {
-    // refresh token
-    const session = await getCurrentSession(true);
-    if (!session) return;
-
-    const access_token = session.getAccessToken().getJwtToken();
-    const id_token = session.getIdToken().getJwtToken();
-
+  const handleGetPrivateKey = async (id_token:string) => {
     await login(WALLET_ADAPTERS.OPENLOGIN, "jwt", {
       id_token,
     });
-    
-    const sk = await getPrivateKey();
-    console.log(sk);
-    setPrivateKey(JSON.stringify(sk, null, 2));
+    return await getPrivateKey();
   };
 
   useEffect(() => {
-    return () => {
-      effect
-    };
-  }, [input])
+    (async () => {
+      
+      const base64 = window.location.href.split("#")[1];
+      
+      if(!isLoading && provider && base64){
+        const dataBase64 = JSON.parse(Buffer.from(base64, 'base64').toString('binary'));
+        const redirectUrl = dataBase64.init.redirectUrl;
+        console.log(dataBase64);
+        
+        console.log("redirectUrl",redirectUrl);
+        const id_token = dataBase64.init.id_token;
+        // const sk = await handleGetPrivateKey(id_token)
+        
+        // const jwt = sign({
+        //   privateKey:sk
+        // }, 'secret', { expiresIn: 60 * 60 });
+        // console.log(jwt);
+        // if(sk)
+        //   window.location.replace(`http://localhost:12345/success=${jwt}`);
+      }
+    })();
+  }, [query?.id_token,isLoading,provider])
 
   return (
     <div className={styles.container}>
@@ -69,11 +77,7 @@ const Home: NextPage = () => {
             <Button onClick={handleSignOut}>SIGN OUT</Button>            
           </>
         ) :""}
-        {privateKey && (
-              <pre>
-                <code>{privateKey}</code>              
-              </pre>
-            )}
+    
       </VStack>
     </div>
   );

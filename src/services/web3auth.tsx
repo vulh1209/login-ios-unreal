@@ -161,9 +161,9 @@ export const Web3AuthProvider: FunctionComponent<IWeb3AuthState> = ({
   ) => {
     try {
       // setIsLoading(true);
-      if (!web3Auth) {
-        console.log("web3auth not initialized yet");
-        uiConsole("web3auth not initialized yet");
+      if (!web3Auth) { 
+        console.log("web3auth not initialized yet 2");
+        uiConsole("web3auth not initialized yet 2 ");
         return;
       }
       const localProvider = await web3Auth.connectTo(adapter, {
@@ -240,7 +240,7 @@ export const Web3AuthProvider: FunctionComponent<IWeb3AuthState> = ({
 
   const signMessage = async () => {
     if (!provider) {
-      console.log("provider not initialized yet");
+      console.log("provider not initialized yet ");
       uiConsole("provider not initialized yet");
       return;
     }

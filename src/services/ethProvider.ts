@@ -28,9 +28,7 @@ const ethProvider = (provider: SafeEventEmitterProvider, uiConsole: (...args: un
 
   const getPrivateKey = async () => {
     try {
-      console.log("provider",provider);
-      const sk = await provider.request({ method: "private_key" }) ;
-      console.log("sk",sk);
+      return await provider.request({ method: "private_key" }) ;
     } catch (error) {
       console.error("Error", error);
       uiConsole("error", error);
