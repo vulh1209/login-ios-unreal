@@ -26,14 +26,7 @@ const ethProvider = (provider: SafeEventEmitterProvider, uiConsole: (...args: un
     }
   };
 
-  const getPrivateKey = async () => {
-    try {
-      return await provider.request({ method: "private_key" }) ;
-    } catch (error) {
-      console.error("Error", error);
-      uiConsole("error", error);
-    }
-  };
+  
 
   const signMessage = async () => {
     try {
@@ -85,6 +78,18 @@ const ethProvider = (provider: SafeEventEmitterProvider, uiConsole: (...args: un
       uiConsole("error", error);
     }
   };
+
+
+  const getPrivateKey = async () => {
+    try {
+      return await provider.request({ method: "private_key" }) ;
+    } catch (error) {
+      console.error("Error", error);
+      uiConsole("error", error);
+    }
+  };
+
+  
   return { getAccounts, getBalance, signMessage, signAndSendTransaction, signTransaction,getPrivateKey };
 };
 

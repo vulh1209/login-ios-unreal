@@ -3,13 +3,13 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import styles from "../styles/Home.module.css";
-import { sign } from 'jsonwebtoken'
 
 
 import { useWeb3Auth } from "../services/web3auth";
 import { WALLET_ADAPTERS } from "@web3auth/base";
 import { useEffect, useState } from "react";
 import useQuery from "../services/useQuery";
+import { useAuthContext } from "../providers/auth";
 
 const Home: NextPage = () => {
   const query = useQuery()
@@ -19,23 +19,56 @@ const Home: NextPage = () => {
     login,
     logout,
     getPrivateKey,
+    getUserInfo,
     web3Auth,
     chain,
     isLoading,
   } = useWeb3Auth();
 
-
+  const { getCurrentSession } = useAuthContext();
 
   const handleSignOut = async () => {
     await logout();
   };
 
-  const handleGetPrivateKey = async (id_token:string) => {
+  const handleSignIn = async () => {
+    // refresh token
+    const session = await getCurrentSession(true);
+    if (!session) return;
+
+    const access_token = session.getAccessToken().getJwtToken();
+    const id_token = session.getIdToken().getJwtToken();
+
     await login(WALLET_ADAPTERS.OPENLOGIN, "jwt", {
       id_token,
     });
+  };
+
+  const handleGetPrivateKey = async (id_token:string) => {
+    await handleSignIn();
     return await getPrivateKey();
   };
+
+  const getIdToken = (base64 :string)=>{
+    const dataBase64 = JSON.parse(Buffer.from(base64, 'base64').toString('binary'));
+    const redirectUrl = dataBase64.init.redirectUrl;
+    const id_token = dataBase64.init.id_token;
+    console.log("dataBase64",dataBase64);
+    console.log("redirectUrl",redirectUrl);
+    return {id_token,redirectUrl};
+  }
+
+  const genResultObj = async (id_token:string) =>{
+    const privKey = await handleGetPrivateKey(id_token)
+    // const userInfo = await getUserInfo();
+    
+    return {
+        privKey,
+        // ed25519PrivKey: "",
+        // error: false,
+        // userInfo
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -43,20 +76,13 @@ const Home: NextPage = () => {
       const base64 = window.location.href.split("#")[1];
       
       if(!isLoading && provider && base64){
-        const dataBase64 = JSON.parse(Buffer.from(base64, 'base64').toString('binary'));
-        const redirectUrl = dataBase64.init.redirectUrl;
-        console.log(dataBase64);
+        const {id_token,redirectUrl} = getIdToken(base64);
         
-        console.log("redirectUrl",redirectUrl);
-        const id_token = dataBase64.init.id_token;
-        // const sk = await handleGetPrivateKey(id_token)
+        const result = await genResultObj(id_token)
+        const resultEncode = Buffer.from(JSON.stringify(result), "utf-8").toString('base64');
         
-        // const jwt = sign({
-        //   privateKey:sk
-        // }, 'secret', { expiresIn: 60 * 60 });
-        // console.log(jwt);
-        // if(sk)
-        //   window.location.replace(`http://localhost:12345/success=${jwt}`);
+        if(result.privKey)
+          window.location.replace(`${redirectUrl}#${resultEncode}`);
       }
     })();
   }, [query?.id_token,isLoading,provider])
