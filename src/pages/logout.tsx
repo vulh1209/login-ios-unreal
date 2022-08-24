@@ -4,13 +4,10 @@ import Head from "next/head";
 
 import styles from "../styles/Home.module.css";
 
-import { useWeb3Auth } from "../services/web3auth";
 import { useEffect, useState } from "react";
-import { useSignOut } from "@sipher.dev/ather-id";
 
 const Home: NextPage = () => {
 
-  const signout = useSignOut()
 
   const getRedirectUrl = (base64:string)=>{
     const dataBase64 = JSON.parse(Buffer.from(base64, 'base64').toString('binary'));
@@ -28,17 +25,16 @@ const Home: NextPage = () => {
       }
       const resultEncode = Buffer.from(JSON.stringify(result), "utf-8").toString('base64');
       
-      if(result.privKey)
-        window.location.replace(`${getRedirectUrl(base64)}#${resultEncode}`);
+      
+      window.location.replace(`${getRedirectUrl(base64)}#${resultEncode}`);
     }
   }
 
   useEffect(() => {
     (async () => {
-      await signout();
       redirectUnrealWebServer();
     })();
-  }, [signout])
+  }, [])
 
   return (
     <div className={styles.container}>

@@ -21,9 +21,7 @@ const useAuthValue = () => {
     }
     if (authState === "signedIn") {
       if (isLoginRoute) {
-        let next = decodeURIComponent((router.query["next"] as string) || "/");
-        const [pathname, search] = next.split("?");
-        router.push({ pathname, search });
+        router.push(`login`);
       }
     }
 
