@@ -2,6 +2,7 @@ import { createContext, FC, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { AtherIdWidgetProvider, useAtherIdContext } from "@sipher.dev/ather-id";
 import { useToast } from "@chakra-ui/react";
+import { getRedirectUrl } from "../services/utils";
 
 const useAuthValue = () => {
   const atherId = useAtherIdContext();
@@ -10,6 +11,7 @@ const useAuthValue = () => {
   const { authState } = atherId;
 
   useEffect(() => {
+    getRedirectUrl()
     if (authState === "initializing" || !router.isReady) return;
 
     const isLoginRoute = router.pathname === "/onboarding";
@@ -24,6 +26,7 @@ const useAuthValue = () => {
         router.push({ pathname, search });
       }
     }
+
   }, [router.isReady, router.pathname, authState]);
 
   useEffect(() => {

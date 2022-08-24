@@ -7,12 +7,11 @@ import styles from "../styles/Home.module.css";
 
 import { useWeb3Auth } from "../services/web3auth";
 import { WALLET_ADAPTERS } from "@web3auth/base";
-import { useEffect, useState } from "react";
-import useQuery from "../services/useQuery";
+import { useEffect } from "react";
 import { useAuthContext } from "../providers/auth";
+import { getRedirectUrl } from "../services/utils";
 
 const Home: NextPage = () => {
-  const query = useQuery()
   const {
     user,
     provider,
@@ -36,56 +35,38 @@ const Home: NextPage = () => {
     const session = await getCurrentSession(true);
     if (!session) return;
 
-    const access_token = session.getAccessToken().getJwtToken();
     const id_token = session.getIdToken().getJwtToken();
+    console.log("id_token",id_token);
 
     await login(WALLET_ADAPTERS.OPENLOGIN, "jwt", {
       id_token,
     });
   };
 
-  const handleGetPrivateKey = async (id_token:string) => {
+  const handleGetPrivateKey = async () => {
     await handleSignIn();
     return await getPrivateKey();
   };
 
-  const getIdToken = (base64 :string)=>{
-    const dataBase64 = JSON.parse(Buffer.from(base64, 'base64').toString('binary'));
-    const redirectUrl = dataBase64.init.redirectUrl;
-    const id_token = dataBase64.init.id_token;
-    console.log("dataBase64",dataBase64);
-    console.log("redirectUrl",redirectUrl);
-    return {id_token,redirectUrl};
-  }
-
-  const genResultObj = async (id_token:string) =>{
-    const privKey = await handleGetPrivateKey(id_token)
-    // const userInfo = await getUserInfo();
-    
-    return {
-        privKey,
-        // ed25519PrivKey: "",
-        // error: false,
-        // userInfo
+  const redirectUnrealWebServer = async () =>{
+    const redirectUrl = getRedirectUrl();
+    const privKey = await handleGetPrivateKey()
+    const result = {
+      privKey,
     }
+    const resultEncode = Buffer.from(JSON.stringify(result), "utf-8").toString('base64');
+    
+    if(result.privKey)
+      window.location.replace(`${redirectUrl}#${resultEncode}`);
   }
 
   useEffect(() => {
     (async () => {
-      
-      const base64 = window.location.href.split("#")[1];
-      
-      if(!isLoading && provider && base64){
-        const {id_token,redirectUrl} = getIdToken(base64);
-        
-        const result = await genResultObj(id_token)
-        const resultEncode = Buffer.from(JSON.stringify(result), "utf-8").toString('base64');
-        
-        if(result.privKey)
-          window.location.replace(`${redirectUrl}#${resultEncode}`);
+      if(!isLoading &&provider){     
+        redirectUnrealWebServer()
       }
     })();
-  }, [query?.id_token,isLoading,provider])
+  }, [isLoading,provider])
 
   return (
     <div className={styles.container}>

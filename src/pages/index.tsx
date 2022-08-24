@@ -33,7 +33,6 @@ const Home: NextPage = () => {
     const session = await getCurrentSession(true);
     if (!session) return;
 
-    const access_token = session.getAccessToken().getJwtToken();
     const id_token = session.getIdToken().getJwtToken();
 
     await login(WALLET_ADAPTERS.OPENLOGIN, "jwt", {

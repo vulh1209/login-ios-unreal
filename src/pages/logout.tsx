@@ -6,19 +6,39 @@ import styles from "../styles/Home.module.css";
 
 import { useWeb3Auth } from "../services/web3auth";
 import { useEffect, useState } from "react";
+import { useSignOut } from "@sipher.dev/ather-id";
 
 const Home: NextPage = () => {
-  const {
-    provider,
-    logout,
-    isLoading,
-  } = useWeb3Auth();
+
+  const signout = useSignOut()
+
+  const getRedirectUrl = (base64:string)=>{
+    const dataBase64 = JSON.parse(Buffer.from(base64, 'base64').toString('binary'));
+    return dataBase64.init.redirectUrl;
+  }
+
+  const redirectUnrealWebServer = async () =>{
+    const base64 = window.location.href.split("#")[1];
+    if( base64){
+      const result = {
+        privKey:"0000000000000000000000000000000000000000000000000000000000000000",
+        ed25519PrivKey: "",
+        error: "false",
+        userInfo:{}
+      }
+      const resultEncode = Buffer.from(JSON.stringify(result), "utf-8").toString('base64');
+      
+      if(result.privKey)
+        window.location.replace(`${getRedirectUrl(base64)}#${resultEncode}`);
+    }
+  }
 
   useEffect(() => {
     (async () => {
-      await logout();
+      await signout();
+      redirectUnrealWebServer();
     })();
-  }, [isLoading,provider,logout])
+  }, [signout])
 
   return (
     <div className={styles.container}>
