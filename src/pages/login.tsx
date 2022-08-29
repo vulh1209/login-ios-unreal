@@ -18,9 +18,6 @@ const Home: NextPage = () => {
     login,
     logout,
     getPrivateKey,
-    getUserInfo,
-    web3Auth,
-    chain,
     isLoading,
   } = useWeb3Auth();
 
@@ -51,8 +48,10 @@ const Home: NextPage = () => {
   const redirectUnrealWebServer = async () =>{
     const redirectUrl = getRedirectUrl();
     const privKey = await handleGetPrivateKey()
+    const authToken = (await getCurrentSession())?.getIdToken().getJwtToken()
     const result = {
       privKey,
+      authToken,
     }
     const resultEncode = Buffer.from(JSON.stringify(result), "utf-8").toString('base64');
     
@@ -62,7 +61,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     (async () => {
-      if(!isLoading &&provider){     
+      if(!isLoading ){     
         redirectUnrealWebServer()
       }
     })();

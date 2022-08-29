@@ -10,8 +10,8 @@ import { Web3AuthProvider } from "../services/web3auth";
 const atherIdOptions = {
   environment: AtherIdEnviromment.Dev,
   oauth: {
-    redirectSignIn: "http://localhost:3002/onboarding",
-    redirectSignOut: "http://localhost:3002/onboarding",
+    redirectSignIn: "http://172.30.22.162:3002/onboarding",
+    redirectSignOut: "http://172.30.22.162:3002/onboarding",
   },
 };
 

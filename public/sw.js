@@ -239,7 +239,7 @@ self.addEventListener("fetch", function (event) {
                 },
                 error: error,
               },
-              "http://localhost:3002"
+              "http://172.30.22.162:3002"
             );
           } else {
             // communicate via broadcast channel

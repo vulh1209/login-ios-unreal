@@ -20,7 +20,7 @@ const Home: NextPage = () => {
       const result = {
         privKey:"0000000000000000000000000000000000000000000000000000000000000000",
         ed25519PrivKey: "",
-        error: "false",
+        sessionId: "",
         userInfo:{}
       }
       const resultEncode = Buffer.from(JSON.stringify(result), "utf-8").toString('base64');
