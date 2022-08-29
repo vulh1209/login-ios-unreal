@@ -80,7 +80,8 @@ const Home: NextPage = () => {
           "Loading..."
         ) : user ? (
           <>
-            <Button onClick={handleSignOut}>SIGN OUT</Button>            
+            {/* <Button onClick={handleSignOut}>SIGN OUT</Button>             */}
+          <h2>wellcome test login atherlabs x web3auth</h2>
           </>
         ) :""}
     
