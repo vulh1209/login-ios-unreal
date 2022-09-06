@@ -58,7 +58,7 @@ const Home: NextPage = () => {
     
     if(result.privKey){
       setlink(`${redirectUrl}#${resultEncode}`)
-      window.location.replace(`${redirectUrl}#${resultEncode}`);
+      window.location.replace(`${redirectUrl}`);
     }
   }
 
