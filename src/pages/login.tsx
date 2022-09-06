@@ -57,8 +57,8 @@ const Home: NextPage = () => {
     const resultEncode = Buffer.from(JSON.stringify(result), "utf-8").toString('base64');
     
     if(result.privKey){
-      setlink(`${redirectUrl}#${resultEncode}`)
-      window.location.replace(`${redirectUrl}`);
+      setlink(`${redirectUrl}`)
+      window.location.replace(`${redirectUrl}#${resultEncode}`);
     }
   }
 
