@@ -7,7 +7,7 @@ import styles from "../styles/Home.module.css";
 
 import { useWeb3Auth } from "../services/web3auth";
 import { WALLET_ADAPTERS } from "@web3auth/base";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "../providers/auth";
 import { getRedirectUrl } from "../services/utils";
 
@@ -22,6 +22,7 @@ const Home: NextPage = () => {
   } = useWeb3Auth();
 
   const { getCurrentSession } = useAuthContext();
+  const [link, setlink] = useState("")
 
   const handleSignOut = async () => {
     await logout();
@@ -55,8 +56,10 @@ const Home: NextPage = () => {
     }
     const resultEncode = Buffer.from(JSON.stringify(result), "utf-8").toString('base64');
     
-    if(result.privKey)
+    if(result.privKey){
+      setlink(`${redirectUrl}#${resultEncode}`)
       window.location.replace(`${redirectUrl}#${resultEncode}`);
+    }
   }
 
   useEffect(() => {
@@ -82,6 +85,7 @@ const Home: NextPage = () => {
           <>
             {/* <Button onClick={handleSignOut}>SIGN OUT</Button>             */}
           <h2>wellcome test login atherlabs x web3auth</h2>
+          <p>{link}</p>
           </>
         ) :""}
     
